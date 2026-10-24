@@ -1,0 +1,16 @@
+services:
+  mongo:
+    image: mongo:7
+    ports: ["27017:27017"]
+    volumes: ["mongodata:/data/db"]
+  api:
+    build: ./backend
+    ports: ["8000:8000"]
+    environment:
+      MONGODB_URI: mongodb://mongo:27017
+      MONGODB_DATABASE: inventory_dashboard
+      SHOPIFY_WEBHOOK_SECRET: ${SHOPIFY_WEBHOOK_SECRET:-}
+      RAZORPAY_WEBHOOK_SECRET: ${RAZORPAY_WEBHOOK_SECRET:-}
+    depends_on: [mongo]
+volumes:
+  mongodata:
